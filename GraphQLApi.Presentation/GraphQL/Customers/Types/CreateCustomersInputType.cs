@@ -14,6 +14,7 @@ namespace GraphQLApi.Presentation.GraphQL.Customers.Types
             Name = "CreateCustomersInput";
             Field(x => x.Name);
             Field(x => x.DateBirth);
+            Field(x => x.IsActive);
         }
     }
 }

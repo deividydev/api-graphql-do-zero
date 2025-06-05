@@ -2,6 +2,8 @@ using GraphQLApi.Contracts.Customers.Dtos;
 using GraphQLApi.Contracts.Customers.Inputs;
 using GraphQLApi.Domain.Entities;
 using GraphQLApi.Domain.Repositories;
+using GraphQLApi.Domain.Specifications;
+using GraphQLApi.Domain.SpecificationsBase;
 
 namespace GraphQLApi.Application.CustomersServices
 {
@@ -11,12 +13,16 @@ namespace GraphQLApi.Application.CustomersServices
 
         public async Task<IEnumerable<CustomersDto>> GetAllAsync()
         {
-            var customers = await _customersRepository.GetAllAsync();
+            var spec = new ActiveCustomerSpecification()
+                        .And(new HasNameSpecification());
+
+            var customers = await _customersRepository.GetAllAsync(spec.Criteria);
             return customers.Select(res => new CustomersDto
             {
                 Id = res.Id,
                 Name = res.Name.Trim(),
-                DateBirth = res.DateBirth
+                DateBirth = res.DateBirth,
+                IsActive = res.IsActive
             });
         }
 
@@ -25,7 +31,8 @@ namespace GraphQLApi.Application.CustomersServices
             var customer = new Customers
             {
                 Name = input.Name.Trim(),
-                DateBirth = input.DateBirth
+                DateBirth = input.DateBirth,
+                IsActive = input.IsActive
             };
 
             await _customersRepository.AddAsync(customer);
@@ -34,7 +41,8 @@ namespace GraphQLApi.Application.CustomersServices
             {
                 Id = customer.Id,
                 Name = customer.Name,
-                DateBirth = customer.DateBirth
+                DateBirth = customer.DateBirth,
+                IsActive = customer.IsActive
             };
         }
     }

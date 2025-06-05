@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using GraphQLApi.Domain.Entities;
 using GraphQLApi.Domain.Repositories;
 
@@ -14,9 +15,9 @@ namespace GraphQLApi.Infrastructure.Repositories
             return Task.CompletedTask;
         }
 
-        public Task<IEnumerable<Customers>> GetAllAsync()
+        public Task<IEnumerable<Customers>> GetAllAsync(Expression<Func<Customers, bool>> predicate)
         {
-            return Task.FromResult(_customers.AsEnumerable());
+            return Task.FromResult(_customers.AsQueryable().Where(predicate).AsEnumerable());
         }
     }
 }

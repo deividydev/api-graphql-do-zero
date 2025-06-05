@@ -10,6 +10,7 @@ namespace GraphQLApi.Presentation.GraphQL.Customers.Types
             Field(x => x.Id);
             Field(x => x.Name);
             Field(x => x.DateBirth);
+            Field(x => x.IsActive);
         }
     }
 }
